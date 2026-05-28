@@ -39,6 +39,25 @@ export default function TaskForm({ boardId, onCreated }) {
     setTitle(''); setDescription(''); setStatus('todo');
     setPriority('medium'); setCategoryId(''); setDueDate('');
     onCreated();
+    if (dueDate) {
+  const formattedDate = new Date(dueDate).toLocaleDateString('fr-FR', {
+    day: '2-digit', month: 'long', year: 'numeric'
+  });
+  await fetch('/api/send-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      to: [data.user.email],
+      subject: `📋 Tâche créée : ${title}`,
+      html: `
+        <h2>Tâche créée avec succès</h2>
+        <p><strong>Titre :</strong> ${title}</p>
+        <p><strong>Priorité :</strong> ${priority}</p>
+        <p><strong>Échéance :</strong> ${formattedDate}</p>
+      `,
+    }),
+  });
+}
   }
 
   const inputStyle = { padding: '0.5rem 0.75rem', border: '1px solid #CBD5E1', borderRadius: '6px', fontSize: '0.9rem', width: '100%', boxSizing: 'border-box' };

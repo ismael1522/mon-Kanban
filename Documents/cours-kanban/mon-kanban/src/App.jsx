@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -13,10 +14,10 @@ function App() {
       setSession(data.session);
       setLoading(false);
     });
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => setSession(session)
-    );
-    return () => listener.subscription.unsubscribe();
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
   }, []);
 
   if (loading) return <div>Chargement...</div>;
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path='/login' element={session ? <Navigate to='/dashboard' /> : <LoginPage />} />
         <Route path='/dashboard' element={session ? <DashboardPage session={session} /> : <Navigate to='/login' />} />
+        <Route path='/profile' element={session ? <ProfilePage session={session} /> : <Navigate to='/login' />} />
         <Route path='*' element={<Navigate to={session ? '/dashboard' : '/login'} />} />
       </Routes>
     </BrowserRouter>

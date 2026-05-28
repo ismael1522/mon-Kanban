@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import UserTable from '../components/UserTable';
 import TaskList from '../components/TaskList';
+import Navbar from '../components/Navbar';
 
 export default function DashboardPage({ session }) {
   const [users, setUsers] = useState([]);
@@ -29,12 +30,8 @@ export default function DashboardPage({ session }) {
 
   return (
     <div>
-      <header style={{ background: '#1A8C82', color: 'white', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0, fontSize: '1.25rem' }}>🗂 KanbanRT</h1>
-        <button onClick={handleLogout} style={{ background: 'white', color: '#1A8C82', border: 'none', padding: '0.4rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}>
-          Déconnexion
-        </button>
-      </header>
+      <Navbar session={session} />
+      
 
       <main style={{ padding: '2rem' }}>
         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
